@@ -1,0 +1,17 @@
+<?php
+  function current_posts_contents() {
+    // Today's Date
+    $today = getdate();
+    // Date a Week Ago
+    $start_time = mktime(0, 0, 0, $today['mon'] , ($today['mday'] - 7), $today['year']);
+    // Get all posts from past 1 week
+    $end_time = time();
+    // Database Api for data retrieving from Database
+    $query = db_select('node' , 'n')
+    ->fields('n' , array('nid', 'title', 'created'))
+    ->condition('ststus', 1) // shows only published nodes
+    ->condition('created', array($start_time, $end_time), 'BETWEEN')
+    ->orderBy('created', 'DESC') //Most Recent First
+    ->execute();
+    return $query;
+  }

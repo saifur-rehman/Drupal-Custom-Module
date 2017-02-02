@@ -1,0 +1,4 @@
+name = Custom Retrieve Module
+description = Cuctom Module for Retrieving Data.
+core = 7.x
+package = My Custom Modules
