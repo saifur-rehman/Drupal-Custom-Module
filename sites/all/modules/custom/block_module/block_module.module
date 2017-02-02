@@ -52,14 +52,16 @@ function block_module_block_info() {
         }
         else {
           //Pass data through theme function.
+          $block['content']['tn'] = $count;
           $block['content'] = theme('item_list', array(
-            '#title' => t('Syndicate'),
+            '#title' => t('Syndicte'),
             'items' => $items,
             '#prefix' => '<p>',
-            '#suffix' => '</p>',
             '#markup' => t('Nodes are : '),
+            '#suffix' => '</p>',
             )
           );
+
           $block['subject'] = t('Total Nodes are : '.$count);
           dsm($count);
         }
