@@ -1,0 +1,4 @@
+name = My Contents
+description = All Contents created my Login user
+core = 7.x
+package = My Custom Modules

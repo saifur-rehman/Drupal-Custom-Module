@@ -1,0 +1,98 @@
+<?php
+/**
+ * @file
+ * Hello World demonstrates the use of SimpleTest for Drupal 7.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function helloworld_menu() {
+  $items = array();
+
+  $items['helloworld'] = array(
+    'title' => 'Hello World',
+    'access callback' => TRUE,
+    'page callback' => 'helloworld_hello_page',
+    'type' => MENU_NORMAL_ITEM,
+    'menu' => 'navigation',
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback for /helloworld.
+ */
+// function helloworld_hello_page() {
+  // $a = 2;
+  // $b = 5;
+  // $c = $a + $b;
+//   // return t('Hello World. Welcome to Drupal.');
+//   echo "<div class='text-center'><br><br>yes!!!!! <br><br>";
+//   print($a . ' + ' . $b . ' = ' . $c);
+//   echo "</div>";
+//   print render($b);
+//   // $items_all = array(
+//   //   '#title' => '$a',
+//   //   );
+//   // return $c;
+//   return t('The Sum of ' . $a . ' and ' . $b . ' is ' . $c);
+// }
+function helloworld_hello_page() {
+  $content = array();
+  $a = 2;
+  $b = 5;
+  $c = $a + $b;
+  $content['raw_markup'] = array(
+    '#type' => 'markup',
+    '#markup' => 'Truly, this is magical!',
+    '#prefix' => '<p>',
+    '#sufix' => '</p>',
+  );
+  $vairiables =array(
+    'path' => 'http://placekitten.com/440/400',
+    'alt' => t('This is a magical kitten'),
+    'title' => t('This is the title'),
+  );
+  $content['theme_data'] = array(
+    '#type' => 'markup',
+    '#markup' => theme('image', $vairiables),
+    '#prefix' => '<div class="kitten_image">',
+    '#sufix' => '</div>',
+    '#attached' => array(
+      'css' => array (
+        drupal_get_path('module' , 'helloworld') . '/helloworld.css'
+      ),
+    ),
+  );
+  $content['renderable_element'] = array(
+    '#theme' => 'item_list',
+    '#title' => t('magic title'),
+    '#items' => array(
+      t('Nice Kitten'),
+      t('Cute Kitten'),
+      t('Beautiful Kitten'),
+      t('Awesome Kitten'),
+      t('The Current time is %time.', array('%time' => date('r'))),
+      t('The Sum of ' . $a . ' and ' . $b . ' is ' . $c),
+    ),
+    '#cache' => array(
+      'keys' => array('helloworld', 'renderable_element'),
+      'bin' => 'cache',
+      'expire' => time() + 10,
+      'granularity' => DRUPAL_CACHE_PER_PAGE,
+    ),
+  );
+
+  return $content;
+
+}
+// $block = module_invoke('current_posts', 'block_view');
+
+ // {
+//   $args = func_get_args();
+//   unset($args[0], $args[1]);
+//   if (module_hook($module, $hook)) {
+//     return call_user_func_array($module . '_' . $hook, $args);
+// }

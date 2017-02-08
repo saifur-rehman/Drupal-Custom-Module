@@ -1,0 +1,143 @@
+<?php
+/*
+* function hook_menu
+*/
+
+  function my_contents_menu() {
+    $items = array();
+    $items['admin/content/my-contents'] = array(
+      'title' => 'Your Contents Here',
+      'description' => 'All Contents Added by you are listed here',
+      'access callback' => TRUE,
+      'page callback' => 'my_contents_show',
+      // 'type' => MENU_NORMAL_ITEM,
+      // 'menu' => 'navigation',
+      );
+    $items['my_contents'] = array(
+      'title' => 'My Current',
+      'page callback' => '_my_contents_page',
+      'access arguments' => array('access current_posts content'),
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK, //Will not appear in any menu.
+    );
+    return $items;
+  }
+  /**
+   * Implements hook_block_info().
+   */
+  function my_contents_block_info() {
+    $blocks['my_posts'] = array(
+      'info' => t('Your posts'), //The name that will appear in the block list.
+      'cache' => DRUPAL_CACHE_PER_ROLE, //Default
+    );
+    return $blocks;
+  }
+  /*
+  * DB select all with admkin auther
+  */
+  function my_contents_dbsel($display){
+    global $user;
+    $query = db_select('node', 'n')
+      ->fields('n', array('nid', 'title', 'created'))
+      ->condition('status', 1) //Published.
+      ->condition('uid', $user->uid)
+
+      ->orderBy('created', 'DESC'); //Most recent first.
+
+        if ($display == 'block'){
+          //Restrict the range if it's a block.
+          $query->range(1,10);
+          // var_dump('block');
+        }//Now proceeds to execute.
+        //If called by page, query proceeds directly to execute().
+
+        return $query->execute();
+      }
+  /**
+   * Implements hook_block_view().
+   *
+   * Prepares the contents of the block(s).
+   */
+  function my_contents_block_view($delta = '') {
+    switch($delta){
+      case 'my_posts':
+        $block['subject'] = t('Current posts');
+        if(user_access('access content')){
+          //Use our custom function to retrieve data and
+          //identify request source as block.
+          $result = my_contents_dbsel('block');
+          //Array to contain items for the block to render.
+          $items = array();
+          //Iterate over the resultset and format as links.
+          foreach ($result as $node){
+            $items[] = array(
+              'data' => l($node->title, 'node/' . $node->nid),
+            );
+          }
+
+          if (empty($items)) { //No content in the last week.
+            $block['content'] = t('No posts available.');
+          }
+          else {
+            //Pass data through theme function.
+            $block['content']['posts'] = array(
+              '#theme' => 'item_list__my_posts__block',
+              '#items' => $items,
+            );
+            //Add a link to the page for more entries.
+            //Add a link to the page for more entries.
+            $block['content']['more'] = array(
+              '#theme' => 'more_link__my_contents',
+              '#url' => 'my_contents',
+              '#title' => t('See the full list of current posts.'),
+            );
+          }
+        }
+    }
+    return $block;
+  }
+  function my_contents_show() {
+    global $user;
+    $content = array();
+    $content['all'] = array(
+      '#theme' => 'item_list',
+      '#title' => t('All your Contents Listed Here'),
+      '#items' => array(
+        t('nice ' . $user->name),
+        ),
+    );
+    return $content;
+  }
+  /**
+   * Custom page callback function, declared in my_contents_menu().
+   */
+  function _my_contents_page() {
+    drupal_set_title('Your Contents');
+    $result = my_contents_dbsel('page');
+    //Array to contain items for the block to render.
+    $items = array();
+    //Iterate over the resultset and format as links.
+    foreach ($result as $node){
+      $items[] = array(
+      'data' => l($node->title, 'node/' . $node->nid),
+      );
+    }
+
+    if (empty($items)) { //No content in the last week.
+      $page_array['my_contents_arguments'] = array(
+        //Title serves as page subtitle
+        '#title' => t('All posts from the last weeks'),
+        '#markup' => t('No posts available.'),
+      );
+      return $page_array;
+    }
+    else {
+      $page_array['my_contents_arguments'] = array(
+        '#title' => t('All posts from the last week'),
+        '#items' => $items,
+        //Theme function includes theme hook suggestion.
+        '#theme' => 'item_list__my_contents',
+      );
+      return $page_array;
+    }
+  }
