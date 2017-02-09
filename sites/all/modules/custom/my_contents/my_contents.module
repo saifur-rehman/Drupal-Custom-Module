@@ -126,8 +126,8 @@
     if (empty($items)) { //No content in the last week.
       $page_array['my_contents_arguments'] = array(
         //Title serves as page subtitle
-        '#title' => t('All posts from the last weeks'),
-        '#markup' => t('No posts available.'),
+        '#title' => t('All nodes by you'),
+        '#markup' => t('No nodes available.'),
       );
       return $page_array;
     }
