@@ -1,0 +1,10 @@
+name = Stripe "Subscription"
+description = "Associate Drupal accounts with stripe subscription."
+project = "subscribe_stripe"
+version = "7.x-1.0"
+package = "Stripe"
+core = "7.x"
+configure = admin/config/stripe/subscribe
+
+dependencies[] = stripe
+dependencies[] = stripe_customer
