@@ -1,0 +1,4 @@
+name = Form Menu
+description = An example module to demonstrate Forms and Menu
+core = 7.x
+package = My Custom Modules
