@@ -1,0 +1,4 @@
+name = Crud data
+description = Cuctom Module for CRUD Data.
+core = 7.x
+package = My Custom Modules

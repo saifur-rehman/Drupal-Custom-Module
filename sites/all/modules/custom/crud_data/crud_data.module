@@ -1,0 +1,29 @@
+<?php
+/*
+*hook_menu Implementation
+*/
+function crud_data_menu() {
+    $list = array();
+    $list['crud'] = array(
+        'title' => 'CRUD Operations',
+        'access callback' => TRUE,
+        'page callback' => 'crud_data_crud_form',
+        'type' => MENU_NORMAL_ITEM,
+        'menu' => 'navigation',
+    );
+    return $list;
+}
+function crud_data_crud_form($form, &$form_state) {
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name Please'),
+    '#size' => 30,
+    '#maxlength' => 30,
+    '#description' => t('Write Your Name Here.'),
+    '#place_holder' => t('Name'),
+    '#required' => TRUE,
+  );
+
+  return $form;
+}
+
