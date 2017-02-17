@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function crud_data_install(){
+
+}
+/*
+*Implementing hook_schema()
+*/
+function crud_data_schema() {
+  $schema['my_friends'] = array(
+    // Example (partial) specification for table "node".
+    'description' => 'The base table for user friends',
+    'fields' => array(
+      'fr_id' => array(
+        'description' => 'The primary identifier for a friend.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'The current User identifier.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'fr_name' => array(
+        'description' => 'Friend Name',
+        'type' => 'varchar',
+        'length' => 40,
+        'not null' => TRUE,
+      ),
+    ),
+    // For documentation purposes only; foreign keys are not created in the
+    // database.
+    'foreign keys' => array(
+      'fr_author' => array(
+        'table' => 'users',
+        'columns' => array('fr_id' => 'uid'),
+      ),
+    ),
+    'primary key' => array('fr_id'),
+  );
+  return $schema;
+}
+/**
+ * Implements hook_uninstall().
+ */
+function crud_data_uninstall(){
+
+}

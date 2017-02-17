@@ -3,27 +3,86 @@
 *hook_menu Implementation
 */
 function crud_data_menu() {
-    $list = array();
-    $list['crud'] = array(
-        'title' => 'CRUD Operations',
+    $items = array();
+    // $items['crud'] = array(
+    //     'title' => 'Add New Friends',
+    //     'access callback' => TRUE,
+    //     'page callback' => 'drupal_get_form',
+    //     'page arguments' => array('crud_data_crud_form', 2),
+    //     'type' => MENU_NORMAL_ITEM,
+    //     'access callback' => 'user_is_logged_in',
+    //     'menu' => 'menu-user-links',
+    // );
+    $items['cruds'] = array(
+        'title' => 'Add Friends',
         'access callback' => TRUE,
-        'page callback' => 'crud_data_crud_form',
+        'access callback' => 'user_is_logged_in',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crud_data_crud_form', 2),
         'type' => MENU_NORMAL_ITEM,
-        'menu' => 'navigation',
+        'menu-name' => 'menu-user-links',
     );
-    return $list;
+    $items['cruded'] = array(
+        'title' => 'See Your Friends',
+        'access callback' => TRUE,
+        'access callback' => 'user_is_logged_in',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crud_data_select_db'),
+        'type' => MENU_NORMAL_ITEM,
+        'menu_name' => 'menu-user-links',
+    );
+    return $items;
 }
+/*
+* hook_form Implementation
+*/
 function crud_data_crud_form($form, &$form_state) {
-  $form['name'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Name Please'),
-    '#size' => 30,
-    '#maxlength' => 30,
-    '#description' => t('Write Your Name Here.'),
-    '#place_holder' => t('Name'),
-    '#required' => TRUE,
-  );
+    $form = array();
 
+    $form['name'] = array(
+    '#title' => 'Name',
+    '#type' => 'textfield',
+    '#size' => '30',
+    '#placeholder' => "enter your name here",
+    );
+
+    $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Start',
+    "#submit"=>array('crud_data_crud_form_submit')
+    );
   return $form;
 }
+function crud_data_crud_form_validate($form, &$form_state) {
 
+$name = $form_state['values']['name'];
+global $users;
+$error=FALSE;
+
+if (empty($name)) {
+form_set_error("erorr",t("Please enter your Name. Here"));
+$error=TRUE;
+}
+if(strlen($name) < 6){
+form_set_error("Please Enter atleast 6 character Label.");
+$error=TRUE;
+}
+}
+function crud_data_crud_form_submit($form, $form_state) {
+    global $user;
+    $name = $form_state['values']['name'];
+    // Implement DB Insert
+    db_insert('my_friends')
+    ->fields(array('fr_name', 'uid'))
+    ->values(array(
+      'fr_name' => $name,
+      'uid' => $user->uid,
+    ))
+    ->execute();
+      drupal_set_message("successfully saved Your Friend " . $name );
+}
+function crud_data_select_db(){
+    db_select('my_friends')
+    ->fields(array('fr_id', 'fe_name'))
+    ->execute();
+}
