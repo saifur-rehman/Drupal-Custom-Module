@@ -1,0 +1,9 @@
+name = Custom Content Type
+description = Creating an Content type
+core = 7.x
+package = My Custom Modules
+
+dependencies[] = entityreference
+dependencies[] = image
+dependencies[] = link
+dependencies[] = text

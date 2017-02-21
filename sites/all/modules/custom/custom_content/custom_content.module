@@ -1,0 +1,17 @@
+<?php
+/**
+ * Implements hook_node_info().
+ */
+function custom_content_node_info() {
+  $items = array(
+    'content_type_name' => array(
+      'name' => t('Content type name'),
+      'base' => 'node_content',
+      'description' => t('Description of my content type.'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}

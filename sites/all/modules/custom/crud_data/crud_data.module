@@ -4,15 +4,15 @@
 */
 function crud_data_menu() {
     $items = array();
-    // $items['crud'] = array(
-    //     'title' => 'Add New Friends',
-    //     'access callback' => TRUE,
-    //     'page callback' => 'drupal_get_form',
-    //     'page arguments' => array('crud_data_crud_form', 2),
-    //     'type' => MENU_NORMAL_ITEM,
-    //     'access callback' => 'user_is_logged_in',
-    //     'menu' => 'menu-user-links',
-    // );
+    $items['crud'] = array(
+        'title' => 'Add New Friends',
+        'access callback' => TRUE,
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('crud_data_crud_form', 2),
+        'type' => MENU_NORMAL_ITEM,
+        'access callback' => 'user_is_logged_in',
+        'menu' => 'menu-user-links',
+    );
     $items['cruds'] = array(
         'title' => 'Add Friends',
         'access callback' => TRUE,
@@ -82,7 +82,21 @@ function crud_data_crud_form_submit($form, $form_state) {
       drupal_set_message("successfully saved Your Friend " . $name );
 }
 function crud_data_select_db(){
-    db_select('my_friends')
-    ->fields(array('fr_id', 'fe_name'))
-    ->execute();
+    global $user;
+    $user_id = $user->uid;
+    $query = db_select('my_friends', 'fr')
+    ->fields('fr', array('uid', 'fr_name'))
+    ->condition('uid', 1, '=');
+    // $query -> execute();
+    $result = $query->execute()->fetchAll();
+    foreach ($result as $frnd) {
+        krumo($frnd);
+        // print_r($frnd);
+    }
+    $content = array();
+    $content['renderable_element'] = array(
+        '#theme' => 'item_list',
+        '#items' => t($frnd),
+    );
+    return $content['renderable_element'];
 }

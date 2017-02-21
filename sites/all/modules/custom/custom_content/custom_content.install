@@ -1,0 +1,16 @@
+<?php
+include_once 'custom_content.field_base.inc';
+include_once 'custom_content.field_instance.inc';
+
+/**
+ * Implements hook_install().
+ */
+function custom_content_install() {
+  node_types_rebuild();
+  foreach (_custom_content_installed_fields() as $field) {
+    field_create_field($field);
+  }
+  foreach (_custom_content_installed_instances() as $fieldinstance) {
+    field_create_instance($fieldinstance);
+  }
+}
