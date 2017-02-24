@@ -55,7 +55,8 @@
 
   <?php print $content ?>
 
-  <div class=""><?php // print $content['count']; ?></div>
+  <div class=""><?php print 'mjaaa'; ?></div>
   <div class=""><?php print $var; ?></div>
+  <div class=""><?php print $vars['myvar']; ?></div>
 
 </section>
