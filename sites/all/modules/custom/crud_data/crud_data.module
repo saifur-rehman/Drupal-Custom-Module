@@ -30,6 +30,7 @@ function crud_data_menu() {
         'page arguments' => array('crud_data_select_db'),
         'type' => MENU_NORMAL_ITEM,
         'menu_name' => 'menu-user-links',
+        'file' => 'demo_friends_show.inc',
     );
     return $items;
 }
@@ -80,25 +81,6 @@ function crud_data_crud_form_submit($form, $form_state) {
     ))
     ->execute();
       drupal_set_message("successfully saved Your Friend " . $name );
-}
-function crud_data_select_db(){
-    global $user;
-    $user_id = $user->uid;
-    $query = db_select('my_friends', 'fr')
-    ->fields('fr', array('uid', 'fr_name'))
-    ->condition('uid', 1, '=');
-    // $query -> execute();
-    $result = $query->execute()->fetchAll();
-    foreach ($result as $frnd) {
-        krumo($frnd);
-        // print_r($frnd);
-    }
-    $content = array();
-    $content['renderable_element'] = array(
-        '#theme' => 'item_list',
-        '#items' => t($frnd),
-    );
-    return $content['renderable_element'];
 }
 /**
  * Implements hook_theme_registry_alter().

@@ -34,7 +34,7 @@ function current_posts_block_info() {
   return $blocks;
 }
 
-/**
+/**d
  * Custom content function.
  *
  * Sets beginning and end dates, retrieves posts from database

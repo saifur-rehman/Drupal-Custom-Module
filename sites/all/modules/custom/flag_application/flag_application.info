@@ -1,0 +1,5 @@
+name = Flag Application
+description = Custom Flag Application for Flaging
+dependencies[] = flag (x3)
+core = 7.x
+package = My Custom Modules

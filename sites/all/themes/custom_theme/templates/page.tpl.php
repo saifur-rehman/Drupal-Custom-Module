@@ -153,9 +153,6 @@
       <?php if (!empty($action_links)): ?>
         <ul class="action-links"><?php print render($action_links); ?></ul>
       <?php endif; ?>
-      <div class=""><?php // print render(helloworld_hello_page()); ?></div>
-      <div class=""><?php print render($myvari); ?></div>
-      <div class=""><?php print 'mjaaa'; ?></div>
       <?php print render($page['content']); ?>
     </section>
 
@@ -170,6 +167,7 @@
 
 <?php if (!empty($page['footer'])): ?>
   <footer class="footer <?php print $container_class; ?>">
+  <div class=""><?php print render($myvari); ?></div>
     <?php print render($page['footer']); ?>
   </footer>
 <?php endif; ?>
